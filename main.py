@@ -10,7 +10,7 @@ load_dotenv()
 API_KEY = os.getenv("FISH_API_KEY")
 VOICE_ID = os.getenv("FISH_VOICE_ID")
 
-API_URL = "https://api.fish.audio/v1/tts"
+API_URL = "sk-fish-fI3RwtvXZZ8ADjxJ7ulHffSDqlZ-OdZtOpbikDN7L74"
 
 def speak(text):
 
