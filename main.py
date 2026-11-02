@@ -12,11 +12,10 @@ VOICE_ID = os.getenv("FISH_VOICE_ID")
 
 API_URL = "https://api.fish.audio/v1/tts"
 
+
 def speak(text):
 
-    if not API_KEY or not VOICE_ID:
-        print("Ошибка: проверь файл .env")
-        return
+    print("\nWheatley is speaking...")
 
     headers = {
         "Authorization": f"Bearer {API_KEY}",
@@ -30,21 +29,22 @@ def speak(text):
         "format": "mp3"
     }
 
-    print("Wheatley is speaking...")
-
     try:
         response = requests.post(
-            API_URL,
+            "https://api.fish.audio/v1/tts",
             headers=headers,
             json=data,
             timeout=120
         )
 
-        print("HTTP статус:", response.status_code)
+        print("HTTP:", response.status_code)
 
         if response.status_code != 200:
-            print("Ответ Fish Audio:", response.text)
+            print("Fish Audio сообщает:", response.text)
             return
+
+        with open("wheatley.mp3", "wb") as file:
+            file.write(response.content)
 
         pygame.mixer.init()
         pygame.mixer.music.load("wheatley.mp3")
@@ -53,16 +53,12 @@ def speak(text):
         while pygame.mixer.music.get_busy():
             pygame.time.Clock().tick(20)
 
-        pygame.mixer.music.unload()
         pygame.mixer.quit()
 
-        print("Голос Wheatley работает!")
-
-    except requests.exceptions.RequestException as error:
-        print("Ошибка Fish Audio:", error)
+        print("Wheatley voice works!")
 
     except Exception as error:
-        print("Ошибка воспроизведения:", error)
+        print("Ошибка:", error)
 
 
 if __name__ == "__main__":
