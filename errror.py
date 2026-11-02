@@ -1,0 +1,1 @@
+pip install faster-whisper edge-tts pygame ollama sounddevice numpy
