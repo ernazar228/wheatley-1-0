@@ -6,19 +6,20 @@ import pygame
 from dotenv import load_dotenv
 from brain import think
 
-print("Wheatley AI 2.0 запущен!")
-print("Напиши exit для выхода.")
+print("WHEATLEY AI 2.0")
+print("Wheatley is ready!")
 
 while True:
-    user_text = input("\nТы: ")
 
-    if user_text.lower() == "exit":
+    text = input("\nТы: ")
+
+    if text.lower() == "exit":
         print("Wheatley: Goodbye!")
         break
 
-    answer = think(user_text)
-    print("\nWheatley:", answer)
+    answer = think(text)
 
+    print("\nWheatley:", answer)
 load_dotenv()
 
 API_KEY = os.getenv("FISH_API_KEY")
