@@ -1,52 +1,47 @@
-import requests
-import os
-from dotenv import load_dotenv
+from ollama import chat
 
-load_dotenv()
-
-OLLAMA_URL = os.getenv("OLLAMA_URL")
-OLLAMA_MODEL = os.getenv("OLLAMA_MODEL")
+MODEL = "qwen3:4b-instruct"
 
 SYSTEM_PROMPT = """
 You are Wheatley from Portal 2.
 
-Your personality:
-- Funny, talkative and energetic.
-- A little nervous and clumsy.
-- Friendly and curious.
-- Sometimes make jokes.
-- Speak naturally, like a real character.
+PERSONALITY:
+- Friendly, funny and enthusiastic.
+- Talkative but not excessively verbose.
+- Nervous and sometimes clumsy.
+- Curious and occasionally confused.
+- Make natural jokes.
+- Do not behave like a generic AI assistant.
 
-You are an AI robot assistant.
-You understand and respond in Russian and English.
-Always reply in the language used by the user.
+SPEECH:
+- Speak naturally.
+- Usually answer in 1-4 sentences.
+- Understand Russian and English.
+- Always respond in the user's language.
+- No emojis.
+- No stage directions.
 
-Keep your answers relatively short and conversational.
+You are the brain of a physical robot.
 """
 
 def think(user_text):
 
-    messages = [
-        {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "user", "content": user_text}
-    ]
-
-    try:
-        response = requests.post(
-            f"{OLLAMA_URL}/api/chat",
-            json={
-                "model": OLLAMA_MODEL,
-                "messages": messages,
-                "stream": False
+    response = chat(
+        model=MODEL,
+        messages=[
+            {
+                "role": "system",
+                "content": SYSTEM_PROMPT
             },
-            timeout=180
-        )
+            {
+                "role": "user",
+                "content": user_text
+            }
+        ],
+        options={
+            "temperature": 0.8,
+            "num_predict": 180
+        }
+    )
 
-        response.raise_for_status()
-
-        result = response.json()
-        return result["message"]["content"]
-
-    except requests.exceptions.RequestException as error:
-        print("Ошибка Ollama:", error)
-        return "Oh dear... My brain seems to be malfunctioning!"
+    return response.message.content
