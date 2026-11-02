@@ -25,27 +25,23 @@ You are the brain of a physical robot.
 """
 
 def think(user_text):
-    try:
-        response = chat(
-            model=MODEL,
-            messages=[
-                {
-                    "role": "system",
-                    "content": SYSTEM_PROMPT
-                },
-                {
-                    "role": "user",
-                    "content": user_text
-                }
-            ],
-            options={
-                "temperature": 0.8,
-                "num_predict": 180
+
+    response = chat(
+        model=MODEL,
+        messages=[
+            {
+                "role": "system",
+                "content": SYSTEM_PROMPT
+            },
+            {
+                "role": "user",
+                "content": user_text
             }
-        )
+        ],
+        options={
+            "temperature": 0.8,
+            "num_predict": 180
+        }
+    )
 
-        return response.message.content
-
-    except Exception as error:
-        print("Ollama error:", error)
-        return "Oh dear... My brain seems to be malfunctioning!"
+    return response.message.content
