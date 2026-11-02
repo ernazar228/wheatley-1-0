@@ -10,7 +10,7 @@ load_dotenv()
 API_KEY = os.getenv("FISH_API_KEY")
 VOICE_ID = os.getenv("FISH_VOICE_ID")
 
-API_URL = "sk-fish-fI3RwtvXZZ8ADjxJ7ulHffSDqlZ-OdZtOpbikDN7L74"
+API_URL = "https://api.fish.audio/v1/tts"
 
 def speak(text):
 
@@ -40,10 +40,11 @@ def speak(text):
             timeout=120
         )
 
-        response.raise_for_status()
+        print("HTTP статус:", response.status_code)
 
-        with open("wheatley.mp3", "wb") as file:
-            file.write(response.content)
+        if response.status_code != 200:
+            print("Ответ Fish Audio:", response.text)
+        return
 
         pygame.mixer.init()
         pygame.mixer.music.load("wheatley.mp3")
