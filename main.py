@@ -4,6 +4,20 @@ import requests
 import pygame
 
 from dotenv import load_dotenv
+from brain import think
+
+print("Wheatley AI 2.0 запущен!")
+print("Напиши exit для выхода.")
+
+while True:
+    user_text = input("\nТы: ")
+
+    if user_text.lower() == "exit":
+        print("Wheatley: Goodbye!")
+        break
+
+    answer = think(user_text)
+    print("\nWheatley:", answer)
 
 load_dotenv()
 
@@ -12,10 +26,11 @@ VOICE_ID = os.getenv("FISH_VOICE_ID")
 
 API_URL = "https://api.fish.audio/v1/tts"
 
-
 def speak(text):
 
-    print("\nWheatley is speaking...")
+    if not API_KEY or not VOICE_ID:
+        print("Ошибка: проверь файл .env")
+        return
 
     headers = {
         "Authorization": f"Bearer {API_KEY}",
@@ -29,19 +44,17 @@ def speak(text):
         "format": "mp3"
     }
 
+    print("Wheatley is speaking...")
+
     try:
         response = requests.post(
-            "https://api.fish.audio/v1/tts",
+            API_URL,
             headers=headers,
             json=data,
             timeout=120
         )
 
-        print("HTTP:", response.status_code)
-
-        if response.status_code != 200:
-            print("Fish Audio сообщает:", response.text)
-            return
+        response.raise_for_status()
 
         with open("wheatley.mp3", "wb") as file:
             file.write(response.content)
@@ -53,12 +66,16 @@ def speak(text):
         while pygame.mixer.music.get_busy():
             pygame.time.Clock().tick(20)
 
+        pygame.mixer.music.unload()
         pygame.mixer.quit()
 
-        print("Wheatley voice works!")
+        print("Голос Wheatley работает!")
+
+    except requests.exceptions.RequestException as error:
+        print("Ошибка Fish Audio:", error)
 
     except Exception as error:
-        print("Ошибка:", error)
+        print("Ошибка воспроизведения:", error)
 
 
 if __name__ == "__main__":
