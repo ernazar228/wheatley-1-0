@@ -7,5 +7,5 @@ FISH_VOICE_ID=c2482d169bc4e5aa36a3123baafe2c1
 python -c "from dotenv import load_dotenv; import os; load_dotenv(); print('API KEY:', bool(os.getenv('FISH_API_KEY'))); print('VOICE ID:', bool(os.getenv('FISH_VOICE_ID')))"
 sk-fish-nZouguIeNQlXZdqbL63Fw15JrmysL_VJF9Iisp
 voice ac6474da3a324e0c8edf6d796fe59f4d
-ac6474da3a324e0c8edf6d796fe59f4d
+4bb8133a91a64609895de0a376da593a
 .
