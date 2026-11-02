@@ -44,7 +44,7 @@ def speak(text):
 
         if response.status_code != 200:
             print("Ответ Fish Audio:", response.text)
-        return
+            return
 
         pygame.mixer.init()
         pygame.mixer.music.load("wheatley.mp3")
